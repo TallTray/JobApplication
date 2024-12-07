@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("main.DomainTest")]
 
-namespace Main.Domain.WorkflowTemplateDomain
+namespace Domain.CandidateDomain.WorkflowTemplateDomain
 {
     /// <summary>
     /// Шаг в шаблоне Workflow
@@ -12,11 +12,11 @@ namespace Main.Domain.WorkflowTemplateDomain
     public class WorkflowStepTemplate
     {
         protected WorkflowStepTemplate(
-            int number, 
-            string description, 
-            Guid? employeeId, 
-            Guid? roleId, 
-            DateTime dateCreate, 
+            int number,
+            string description,
+            Guid? employeeId,
+            Guid? roleId,
+            DateTime dateCreate,
             DateTime dateUpdate)
         {
             if (number < 1)
@@ -26,7 +26,7 @@ namespace Main.Domain.WorkflowTemplateDomain
 
             if (employeeId is null && roleId is null)
             {
-                throw new ArgumentNullException (("У шага должна быть привязка либо к конкретногому сотруднику либо к должности"));
+                throw new ArgumentNullException("У шага должна быть привязка либо к конкретногому сотруднику либо к должности");
             }
 
             if (employeeId is not null && employeeId == Guid.Empty)
@@ -131,11 +131,11 @@ namespace Main.Domain.WorkflowTemplateDomain
             }
 
             var stepTemplate = new WorkflowStepTemplate(
-                number, 
-                description, 
-                employeeId, 
-                roleId, 
-                DateTime.UtcNow, 
+                number,
+                description,
+                employeeId,
+                roleId,
+                DateTime.UtcNow,
                 DateTime.UtcNow);
 
             return Result<WorkflowStepTemplate>.Success(stepTemplate);
@@ -234,7 +234,7 @@ namespace Main.Domain.WorkflowTemplateDomain
 
             var isChanged = false;
 
-            if (employeeId != EmployeeId) 
+            if (employeeId != EmployeeId)
             {
                 EmployeeId = employeeId;
                 isChanged = true;

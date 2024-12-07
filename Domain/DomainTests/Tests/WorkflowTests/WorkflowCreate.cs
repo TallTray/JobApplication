@@ -1,6 +1,6 @@
-﻿using main.DomainTest.TestTools.Autofixture;
-using Main.Domain.WorkflowDomain;
-using Main.Domain.WorkflowTemplateDomain;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using Domain.CandidateDomain.WorkflowTemplateDomain;
+using main.DomainTest.TestTools.Autofixture;
 using System.Reflection.Metadata.Ecma335;
 
 namespace main.DomainTest.Tests.WorkflowTests

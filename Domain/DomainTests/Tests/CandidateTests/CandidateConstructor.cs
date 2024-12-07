@@ -1,5 +1,7 @@
-﻿using Main.Domain.CandidateDomain;
+﻿using AutoFixture;
+using Main.Domain.CandidateDomain;
 using Main.Domain.EmployeeDomain;
+using Xunit;
 using static main.DomainTest.Tests.RoleTests.RoleConstructor;
 
 namespace main.DomainTest.Tests.CandidateTests

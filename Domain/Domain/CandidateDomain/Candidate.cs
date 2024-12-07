@@ -1,5 +1,4 @@
 ﻿using Main.Domain.Common;
-using Main.Domain.WorkflowDomain;
 
 namespace Main.Domain.CandidateDomain
 {
@@ -21,27 +20,27 @@ namespace Main.Domain.CandidateDomain
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentNullException($"{id} - некорректный идентификатор Кандидата");
+                throw new ArgumentException($"{id} - некорректный идентификатор Кандидата",nameof(id));
             }
-
+            
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("ФИО соискателя не может быть пустым");
+                throw new ArgumentNullException(nameof(name),"ФИО соискателя не может быть пустым");
             }
 
             if (dateCreate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата создания не может быть дефолтной");
+                throw new ArgumentException("Дата создания не может быть дефолтной",nameof(dateCreate));
             }
 
             if (dateUpdate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата обновления не может быть дефолтной");
+                throw new ArgumentException("Дата обновления не может быть дефолтной",nameof(dateUpdate));
             }
 
             if (name.Trim().Length < MinLengthName)
             {
-                throw new ArgumentException($"Длина ФИО соискателя не может быть меньше {MinLengthName}");
+                throw new ArgumentException($"Длина ФИО соискателя не может быть меньше {MinLengthName}",nameof(name));
             }
 
             Id = id;

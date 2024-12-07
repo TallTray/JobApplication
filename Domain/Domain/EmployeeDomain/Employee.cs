@@ -21,22 +21,22 @@ public class Employee
     {
         if (id == Guid.Empty)
         {
-            throw new ArgumentNullException($"{id} - некорректный идентификатор процесса");
+            throw new ArgumentException($"{id} - некорректный идентификатор процесса");
         }
 
         if (string.IsNullOrEmpty(name))
         {
-            throw new ArgumentNullException("ФИО сотрудника не может быть пустым");
+            throw new ArgumentNullException(nameof(name),"ФИО сотрудника не может быть пустым");
         }
 
         if (companyId == Guid.Empty)
         {
-            throw new ArgumentNullException($"{companyId} - некорректный идентификатор компании");
+            throw new ArgumentException($"{companyId} - некорректный идентификатор компании");
         }
 
         if (roleId == Guid.Empty)
         {
-            throw new ArgumentNullException($"{roleId} - некорректный идентификатор должности");
+            throw new ArgumentException($"{roleId} - некорректный идентификатор должности");
         }
 
         if (dateCreate == DateTime.MinValue)

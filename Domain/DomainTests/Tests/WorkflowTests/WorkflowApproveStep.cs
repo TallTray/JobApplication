@@ -1,6 +1,6 @@
-﻿using main.DomainTest.TestTools.Autofixture;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using main.DomainTest.TestTools.Autofixture;
 using Main.Domain.EmployeeDomain;
-using Main.Domain.WorkflowDomain;
 
 namespace main.DomainTest.Tests.WorkflowTests
 {

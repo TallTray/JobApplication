@@ -1,11 +1,11 @@
 ﻿using Main.Domain.EmployeeDomain;
-using Main.Domain.WorkflowDomain;
 using main.DomainTest.TestTools.Autofixture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.CandidateDomain.WorkflowDomain;
 
 namespace main.DomainTest.Tests.WorkflowTests
 {

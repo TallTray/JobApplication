@@ -1,8 +1,8 @@
-﻿using main.DomainTest.TestTools.Autofixture;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using Domain.CandidateDomain.WorkflowDomain.Enum;
+using Domain.CandidateDomain.WorkflowTemplateDomain;
+using main.DomainTest.TestTools.Autofixture;
 using Main.Domain.CandidateDomain;
-using Main.Domain.WorkflowDomain;
-using Main.Domain.WorkflowDomain.Enum;
-using Main.Domain.WorkflowTemplateDomain;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -40,7 +40,7 @@ namespace main.DomainTest.Tests.WorkflowStepTests
             Assert.Equal(descriptionStepTemplate, step.Description);
             Assert.Equal(employeeIdStepTemplate, step.EmployeeId);
             Assert.Equal(roleIdStepTemplate, step.RoleId);
-            Assert.Equal(Status.Expectation, step.Status);
+            Assert.Equal(Status.InProgress, step.Status);
         }
 
         /// <summary>

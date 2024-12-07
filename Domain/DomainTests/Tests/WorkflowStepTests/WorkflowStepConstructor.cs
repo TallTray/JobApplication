@@ -1,5 +1,5 @@
-﻿using Main.Domain.WorkflowDomain;
-using Main.Domain.WorkflowDomain.Enum;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using Domain.CandidateDomain.WorkflowDomain.Enum;
 
 namespace main.DomainTest.Tests.WorkflowStepTests
 {
@@ -48,49 +48,49 @@ namespace main.DomainTest.Tests.WorkflowStepTests
             yield return new object[]
             {
                 Guid.Empty, 1, "Feedback", "LastFeedback", "Description",
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.Expectation, null,
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentNullException), $"{Guid.Empty} - некорректный идентификатор кандидата"
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 0, "Feedback", "LastFeedback", "Description",
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.Expectation, null,
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentOutOfRangeException), "Некорректный номер шага процесса"
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 1, "Feedback", "LastFeedback", null,
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.Expectation, null,
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentNullException), "Описание шага процесса не может быть пустым"
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 1, "Feedback", "LastFeedback", "Description",
-                null, Guid.NewGuid(), null, DateTime.UtcNow, DateTime.UtcNow, Status.Expectation, null,
+                null, Guid.NewGuid(), null, DateTime.UtcNow, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentNullException), "У шага должна быть привязка к конкретногому сотруднику или должности"
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 1, "Feedback", "LastFeedback", "Description",
-                Guid.Empty, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.Expectation, null,
+                Guid.Empty, Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentNullException), $"{Guid.Empty} - некорректное значение для идентификатора сотрудника в шаге"
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 1, "Feedback", "LastFeedback", "Description",
-                Guid.NewGuid(), Guid.NewGuid(), Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Status.Expectation, null,
+                Guid.NewGuid(), Guid.NewGuid(), Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentNullException), $"{Guid.Empty} - некорректное значение для идентификатора должности в шаге"
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 1, "Feedback", "LastFeedback", "Description",
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.MinValue, DateTime.UtcNow, Status.Expectation, null,
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.MinValue, DateTime.UtcNow, Status.InProgress, null,
                 typeof(ArgumentException), "Дата создания не может быть дефолтной."
             };
             yield return new object[]
             {
                 Guid.NewGuid(), 1, "Feedback", "LastFeedback", "Description",
-                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.MinValue, Status.Expectation, null,
+                Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow, DateTime.MinValue, Status.InProgress, null,
                 typeof(ArgumentException), "Дата обновления не может быть дефолтной."
             };
         }
@@ -108,7 +108,7 @@ namespace main.DomainTest.Tests.WorkflowStepTests
             var roleId = _fixture.Create<Guid>();
             var dateCreate = DateTime.UtcNow;
             var dateUpdate = DateTime.UtcNow;
-            var status = Status.Expectation;
+            var status = Status.InProgress;
             var restartAuthorEmployeeId = _fixture.Create<Guid>();
             var restartDate = DateTime.UtcNow;
 

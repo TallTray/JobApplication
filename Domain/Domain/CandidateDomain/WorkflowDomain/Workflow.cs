@@ -1,10 +1,10 @@
+using Domain.CandidateDomain.WorkflowDomain.Enum;
+using Domain.CandidateDomain.WorkflowTemplateDomain;
 using Main.Domain.Common;
 using Main.Domain.EmployeeDomain;
-using Main.Domain.WorkflowDomain.Enum;
-using Main.Domain.WorkflowTemplateDomain;
 using System.Text;
 
-namespace Main.Domain.WorkflowDomain
+namespace Domain.CandidateDomain.WorkflowDomain
 {
     /// <summary>
     /// Сущность Workflow для интервью в компанию
@@ -16,13 +16,13 @@ namespace Main.Domain.WorkflowDomain
         /// </summary>
         public const int MinLengthName = 5;
         protected Workflow(
-            Guid id, 
-            string name, 
-            string description, 
-            IReadOnlyCollection<WorkflowStep> steps, 
-            Guid authorId, Guid candidateId, 
-            Guid templateId, Guid companyId, 
-            DateTime dateCreate, 
+            Guid id,
+            string name,
+            string description,
+            IReadOnlyCollection<WorkflowStep> steps,
+            Guid authorId, Guid candidateId,
+            Guid templateId, Guid companyId,
+            DateTime dateCreate,
             DateTime dateUpdate,
             Guid? restartAuthorEmployeeId,
             string? restartReason,
@@ -30,67 +30,67 @@ namespace Main.Domain.WorkflowDomain
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentNullException($"{id} - некорректный идентификатор Процесса");
+                throw new ArgumentException($"{id} - некорректный идентификатор Процесса",nameof(id));
             }
 
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("Название процесса не может быть пустым");
+                throw new ArgumentNullException(nameof(name),"Название процесса не может быть пустым");
             }
 
             if (string.IsNullOrEmpty(description))
             {
-                throw new ArgumentNullException("Описание процесса не может быть пустым");
+                throw new ArgumentNullException(nameof(description),"Описание процесса не может быть пустым");
             }
 
             if (steps is null)
             {
-                throw new ArgumentNullException("Список шагов должен быть определен");
+                throw new ArgumentNullException(nameof(steps),"Список шагов должен быть определен");
             }
 
             if (steps.Count <= 0)
             {
-                throw new ArgumentException("Список шагов не может быть пустым");
+                throw new ArgumentException("Список шагов не может быть пустым",nameof(steps));
             }
 
             if (steps.Any(s => s is null))
             {
-                throw new ArgumentException("Все шаги в списке должны быть определены");
+                throw new ArgumentException("Все шаги в списке должны быть определены", nameof(steps));
             }
 
             if (authorId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{authorId} - некорректный идентификатор создателя процесса");
+                throw new ArgumentException($"{authorId} - некорректный идентификатор создателя процесса",nameof(authorId));
             }
 
             if (candidateId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{candidateId} - некорректный идентификатор кандидата");
+                throw new ArgumentException($"{candidateId} - некорректный идентификатор кандидата", nameof(candidateId));
             }
 
             if (templateId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{templateId} - некорректный идентификатор шаблона процесса");
+                throw new ArgumentException($"{templateId} - некорректный идентификатор шаблона процесса", nameof(templateId));
             }
 
             if (companyId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{companyId} - некорректный идентификатор компании");
+                throw new ArgumentException($"{companyId} - некорректный идентификатор компании", nameof(companyId));
             }
 
             if (dateCreate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата создания не может быть дефолтной.");
+                throw new ArgumentException("Дата создания не может быть дефолтной.", nameof(dateCreate));
             }
 
             if (dateUpdate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата обновления не может быть дефолтной.");
+                throw new ArgumentException("Дата обновления не может быть дефолтной.",nameof(dateUpdate));
             }
 
             if (name.Trim().Length < MinLengthName)
             {
-                throw new ArgumentException($"Длина наименование процесса не может быть меньше {MinLengthName}");
+                throw new ArgumentException($"Длина наименование процесса не может быть меньше {MinLengthName}",nameof(name));
             }
 
             Id = id;
@@ -156,18 +156,18 @@ namespace Main.Domain.WorkflowDomain
                 .AsReadOnly();
 
             var workflow = new Workflow(
-                Guid.NewGuid(), 
-                template.Name, 
+                Guid.NewGuid(),
+                template.Name,
                 template.Description,
                 steps!,
-                authorId, 
-                candidateId, 
-                template.Id, 
-                template.CompanyId, 
-                DateTime.UtcNow, 
+                authorId,
+                candidateId,
+                template.Id,
+                template.CompanyId,
+                DateTime.UtcNow,
                 DateTime.UtcNow,
                 null,
-                null, 
+                null,
                 null);
 
             return Result<Workflow>.Success(workflow);
@@ -231,14 +231,14 @@ namespace Main.Domain.WorkflowDomain
         /// <summary>
         /// Дата перезапуска процесса
         /// </summary>
-        public DateTime? RestartDate { get; private set; } 
+        public DateTime? RestartDate { get; private set; }
 
         /// <summary>
         /// Статус информирующий о положениее рабочего процесса
         /// </summary>
         public Status Status => Steps.Any(s => s.Status == Status.Rejected) ? Status.Rejected
                                  : Steps.All(s => s.Status == Status.Approved) ? Status.Approved
-                                 : Status.Expectation;
+                                 : Status.InProgress;
 
 
         /// <summary>
@@ -284,7 +284,7 @@ namespace Main.Domain.WorkflowDomain
                     isChange = true;
                 }
             }
-            
+
             if (isChange)
             {
                 DateUpdate = DateTime.UtcNow;
@@ -305,19 +305,19 @@ namespace Main.Domain.WorkflowDomain
                 return Result<bool>.Failure($"{nameof(employee)} не может быть пустым");
             }
 
-            if (Status != Status.Expectation && Status != Status.Approved)
+            if (Status != Status.InProgress && Status != Status.Approved)
             {
                 return Result<bool>.Failure("Отклоненный рабочий процесс, не может быть одобрен");
             }
 
-            if (Status != Status.Expectation)
+            if (Status != Status.InProgress)
             {
                 return Result<bool>.Failure("Рабочий процесс завершен");
             }
 
             var step = Steps
                  .OrderBy(x => x.Number)
-                 .First(s => s.Status == Status.Expectation);
+                 .First(s => s.Status == Status.InProgress);
 
             var resultApprove = step.Approve(employee, feedback);
 
@@ -343,14 +343,14 @@ namespace Main.Domain.WorkflowDomain
                 return Result<bool>.Failure($"{nameof(employee)} не может быть пустым");
             }
 
-            if (Status != Status.Expectation)
+            if (Status != Status.InProgress)
             {
                 return Result<bool>.Failure("Рабочий процесс завершен");
             }
 
             var step = Steps
                 .OrderBy(x => x.Number)
-                .First(s => s.Status == Status.Expectation);
+                .First(s => s.Status == Status.InProgress);
 
             var resultReject = step.Reject(employee, feedback);
 
@@ -407,7 +407,7 @@ namespace Main.Domain.WorkflowDomain
                 return Result<bool>.Failure($"{nameof(employee)} не может быть пустым");
             }
 
-            if (Status != Status.Expectation)
+            if (Status != Status.InProgress)
             {
                 return Result<bool>.Failure($"Рабочий процесс завершен");
             }
@@ -420,7 +420,7 @@ namespace Main.Domain.WorkflowDomain
                 return Result<bool>.Failure($"Шаг с номером {numberStep} не найден");
             }
 
-            if (step.Status != Status.Expectation)
+            if (step.Status != Status.InProgress)
             {
                 return Result<bool>.Failure($"Шаг {numberStep} завершен");
             }

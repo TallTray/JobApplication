@@ -1,8 +1,8 @@
-﻿using main.DomainTest.TestTools.Autofixture;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using Domain.CandidateDomain.WorkflowDomain.Enum;
+using main.DomainTest.TestTools.Autofixture;
 using Main.Domain.Common;
 using Main.Domain.EmployeeDomain;
-using Main.Domain.WorkflowDomain;
-using Main.Domain.WorkflowDomain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace main.DomainTest.Tests.WorkflowTests
 
             Assert.True(result.IsSuccess);
             Assert.False(result.Value);
-            Assert.Equal(Status.Expectation, _workflow.Status);
+            Assert.Equal(Status.InProgress, _workflow.Status);
             Assert.Equal(_employee.Id, _workflow.RestartAuthorEmployeeId);
             Assert.Equal(restartReason, _workflow.RestartReason);
             Assert.Equal(DateTime.UtcNow, (DateTime)_workflow.RestartDate!, precision: TimeSpan.FromSeconds(1));
@@ -73,7 +73,7 @@ namespace main.DomainTest.Tests.WorkflowTests
 
             foreach (var step in _workflow.Steps)
             {
-                Assert.Equal(Status.Expectation, step.Status);
+                Assert.Equal(Status.InProgress, step.Status);
             }
         }
     }

@@ -1,7 +1,7 @@
-﻿using main.DomainTest.TestTools.Autofixture;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using Domain.CandidateDomain.WorkflowDomain.Enum;
+using main.DomainTest.TestTools.Autofixture;
 using Main.Domain.EmployeeDomain;
-using Main.Domain.WorkflowDomain;
-using Main.Domain.WorkflowDomain.Enum;
 
 namespace main.DomainTest.Tests.WorkflowTests
 {

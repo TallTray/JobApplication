@@ -1,5 +1,5 @@
-﻿using Main.Domain.WorkflowDomain;
-using Main.Domain.WorkflowTemplateDomain;
+﻿using Domain.CandidateDomain.WorkflowDomain;
+using Domain.CandidateDomain.WorkflowTemplateDomain;
 
 namespace main.DomainTest.TestTools.Autofixture.Customizations
 {

@@ -1,4 +1,4 @@
-﻿namespace Main.Domain.WorkflowDomain.Enum;
+﻿namespace Domain.CandidateDomain.WorkflowDomain.Enum;
 
 /// <summary>
 /// Статус объекта
@@ -13,7 +13,7 @@ public enum Status
     /// <summary>
     /// Ожидание
     /// </summary>
-    Expectation = 1,
+    InProgress = 1,
 
     /// <summary>
     /// Одобренно

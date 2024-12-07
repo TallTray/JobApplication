@@ -20,32 +20,32 @@ namespace Main.Domain.EmployeeDomain
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentNullException($"{id} - некорректный идентификатор должности");
+                throw new ArgumentException($"{id} - некорректный идентификатор должности", nameof(id));
             }
 
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentNullException("Наименование должности не может быть пустым");
+                throw new ArgumentNullException(nameof(name),"Наименование должности не может быть пустым");
             }
 
             if (companyId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{companyId} - некорректный идентификатор компании");
+                throw new ArgumentException($"{companyId} - некорректный идентификатор компании",nameof(companyId));
             }
 
             if (dateCreate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата создания не может быть дефолтной");
+                throw new ArgumentException("Дата создания не может быть дефолтной",nameof(dateCreate));
             }
 
             if (dateUpdate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата обновления не может быть дефолтной");
+                throw new ArgumentException("Дата обновления не может быть дефолтной",nameof(dateUpdate));
             }
 
             if (name.Trim().Length < MinLengthName)
             {
-                throw new ArgumentException($"Длина наименования должности не может быть меньше {MinLengthName}");
+                throw new ArgumentException($"Длина наименования должности не может быть меньше {MinLengthName}",nameof(name));
             }
 
             Id = id;

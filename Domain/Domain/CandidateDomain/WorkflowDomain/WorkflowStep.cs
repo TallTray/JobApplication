@@ -1,12 +1,12 @@
-﻿using Main.Domain.Common;
+﻿using Domain.CandidateDomain.WorkflowDomain.Enum;
+using Domain.CandidateDomain.WorkflowTemplateDomain;
+using Main.Domain.Common;
 using Main.Domain.EmployeeDomain;
-using Main.Domain.WorkflowDomain.Enum;
-using Main.Domain.WorkflowTemplateDomain;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("main.DomainTest")]
 
-namespace Main.Domain.WorkflowDomain
+namespace Domain.CandidateDomain.WorkflowDomain
 {
     /// <summary>
     /// Шаг рабочего процесса
@@ -14,57 +14,57 @@ namespace Main.Domain.WorkflowDomain
     public class WorkflowStep
     {
         protected WorkflowStep(
-            Guid candidateId, 
-            int number, 
+            Guid candidateId,
+            int number,
             string? feedback,
             string? lastFeedback,
             string description,
             Guid? employeeId,
             Guid? lastEmployeeId,
-            Guid? roleId, 
-            DateTime dateCreate, 
+            Guid? roleId,
+            DateTime dateCreate,
             DateTime dateUpdate,
             Status status,
             DateTime? restartDate)
         {
             if (candidateId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{candidateId} - некорректный идентификатор кандидата");
+                throw new ArgumentException($"{candidateId} - некорректный идентификатор кандидата", nameof(candidateId));
             }
 
             if (number < 1)
             {
-                throw new ArgumentOutOfRangeException("Некорректный номер шага процесса");
+                throw new ArgumentOutOfRangeException("Некорректный номер шага процесса",nameof(number));
             }
 
             if (string.IsNullOrEmpty(description))
             {
-                throw new ArgumentNullException("Описание шага процесса не может быть пустым");
+                throw new ArgumentNullException(nameof(description),"Описание шага процесса не может быть пустым");
             }
 
             if (employeeId is null && roleId is null)
             {
-                throw new ArgumentNullException("У шага должна быть привязка к конкретногому сотруднику или должности");
+                throw new ArgumentNullException($"{nameof(employeeId)}, {nameof(roleId)}","У шага должна быть привязка к конкретногому сотруднику или должности");
             }
 
             if (employeeId is not null && employeeId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{employeeId} - некорректное значение для идентификатора сотрудника в шаге");
+                throw new ArgumentException($"{employeeId} - некорректное значение для идентификатора сотрудника в шаге", nameof(employeeId));
             }
 
             if (roleId is not null && roleId == Guid.Empty)
             {
-                throw new ArgumentNullException($"{roleId} - некорректное значение для идентификатора должности в шаге");
+                throw new ArgumentException($"{roleId} - некорректное значение для идентификатора должности в шаге", nameof(roleId));
             }
 
             if (dateCreate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата создания не может быть дефолтной.");
+                throw new ArgumentException("Дата создания не может быть дефолтной.",nameof(dateCreate));
             }
 
             if (dateUpdate == DateTime.MinValue)
             {
-                throw new ArgumentException("Дата обновления не может быть дефолтной.");
+                throw new ArgumentException("Дата обновления не может быть дефолтной.",nameof(dateUpdate));
             }
 
             CandidateId = candidateId;
@@ -104,17 +104,17 @@ namespace Main.Domain.WorkflowDomain
                 return Result<WorkflowStep>.Failure("У шага должна быть привязка к конкретному сотруднику или должности");
             }
 
-            var step = new WorkflowStep(candidateId, 
-                                        stepTemplate.Number, 
+            var step = new WorkflowStep(candidateId,
+                                        stepTemplate.Number,
                                         null,
                                         null,
                                         stepTemplate.Description,
                                         stepTemplate.EmployeeId,
                                         null,
-                                        stepTemplate.RoleId, 
-                                        DateTime.UtcNow, 
-                                        DateTime.UtcNow, 
-                                        Status.Expectation,  
+                                        stepTemplate.RoleId,
+                                        DateTime.UtcNow,
+                                        DateTime.UtcNow,
+                                        Status.InProgress,
                                         null);
 
             return Result<WorkflowStep>.Success(step);
@@ -197,8 +197,8 @@ namespace Main.Domain.WorkflowDomain
                 return Result<bool>.Failure($"{nameof(employee)} не может быть пустым");
             }
 
-            if (RoleId is not null 
-                && RoleId != Guid.Empty 
+            if (RoleId is not null
+                && RoleId != Guid.Empty
                 && employee.Id != RoleId)
             {
                 return Result<bool>.Failure("Должность сотрудника не соответсвет заявленной");
@@ -212,7 +212,7 @@ namespace Main.Domain.WorkflowDomain
                 }
             }
 
-            if (Status != Status.Expectation)
+            if (Status != Status.InProgress)
             {
                 return Result<bool>.Failure("Шаг завершен");
             }
@@ -243,7 +243,7 @@ namespace Main.Domain.WorkflowDomain
             }
 
             if (RoleId is not null
-                && RoleId != Guid.Empty 
+                && RoleId != Guid.Empty
                 && employee.Id != RoleId)
             {
                 return Result<bool>.Failure("Должность сотрудника не соответсвует заявленной");
@@ -257,7 +257,7 @@ namespace Main.Domain.WorkflowDomain
                 }
             }
 
-            if (Status != Status.Expectation)
+            if (Status != Status.InProgress)
             {
                 return Result<bool>.Failure("Шаг завершен");
             }
@@ -273,9 +273,9 @@ namespace Main.Domain.WorkflowDomain
         /// Перезагрузка шага из workflow
         /// </summary>
         internal void Restart()
-        { 
+        {
             //Возвращаем шаг в активное состояние
-            Status = Status.Expectation;
+            Status = Status.InProgress;
             //Сохранение прошлого фидбека
             LastFeedback = Feedback;
             //Обнуление текущего фидбека

@@ -1,7 +1,7 @@
 ﻿using Main.Domain.Common;
 using System.Runtime.CompilerServices;
 
-namespace Main.Domain.WorkflowTemplateDomain
+namespace Domain.CandidateDomain.WorkflowTemplateDomain
 {
     /// <summary>
     /// Шаблон Workfloy
@@ -14,10 +14,10 @@ namespace Main.Domain.WorkflowTemplateDomain
         public const int MinLengthName = 5;
         protected WorkflowTemplate(
             Guid id,
-            string name, 
-            string description, 
-            List<WorkflowStepTemplate> stepsTemplate, 
-            Guid companyId, DateTime dateCreate, 
+            string name,
+            string description,
+            List<WorkflowStepTemplate> stepsTemplate,
+            Guid companyId, DateTime dateCreate,
             DateTime dateUpdate)
         {
             if (id == Guid.Empty)
@@ -38,7 +38,7 @@ namespace Main.Domain.WorkflowTemplateDomain
             if (stepsTemplate is null)
             {
                 throw new ArgumentNullException("Список шаблонных шагов должен быть определен");
-            }            
+            }
 
             if (companyId == Guid.Empty)
             {
@@ -100,12 +100,12 @@ namespace Main.Domain.WorkflowTemplateDomain
             }
 
             var workflowTemplate = new WorkflowTemplate(
-                Guid.NewGuid(), 
-                name.Trim(), 
-                description, 
-                [] ,
-                companyId, 
-                DateTime.UtcNow, 
+                Guid.NewGuid(),
+                name.Trim(),
+                description,
+                [],
+                companyId,
+                DateTime.UtcNow,
                 DateTime.UtcNow);
 
             return Result<WorkflowTemplate>.Success(workflowTemplate);
@@ -178,7 +178,7 @@ namespace Main.Domain.WorkflowTemplateDomain
                     Name = name.Trim();
                     isChanged = true;
                 }
-                
+
             }
 
             if (description is not null)
@@ -280,8 +280,8 @@ namespace Main.Domain.WorkflowTemplateDomain
 
             var isChanged = false;
 
-            if (_steps[numberFirst - 1].DateUpdate>DateUpdate
-                && _steps[numberSecond - 1].DateUpdate>DateUpdate)
+            if (_steps[numberFirst - 1].DateUpdate > DateUpdate
+                && _steps[numberSecond - 1].DateUpdate > DateUpdate)
             {
                 isChanged = true;
             }
