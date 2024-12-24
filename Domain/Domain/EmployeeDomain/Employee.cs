@@ -192,32 +192,4 @@ public class Employee
 
         return Result<bool>.Success(true);
     }
-
-    /// <summary>
-    /// Обновление компании сотрудника
-    /// </summary>
-    /// <param name="companyId">Идентификатор компании</param>
-    /// <returns>Успешность выполнения операции</returns>
-    public Result<bool> UpdateCompany(Guid companyId)
-    {
-        if (companyId == Guid.Empty)
-        {
-            return Result<bool>.Failure("Некорректное значение идентификатора компании");
-        }
-
-        var isChanged = false;
-
-        if (companyId != CompanyId)
-        {
-            CompanyId = companyId;
-            isChanged = true;
-        }
-
-        if (isChanged)
-        {
-            DateUpdate = DateTime.UtcNow;
-        }
-
-        return Result<bool>.Success(true);
-    }
 }
